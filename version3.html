@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zinquetz Café de Raíz | Menú Digital PRO</title>
+<meta name="description" content="Zinquetz Café de Raíz: bebidas con sabores únicos y antojos inspirados en la cultura mexicana. Pedidos para llevar y a domicilio en Coyuya, Ciudad de México.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* CSS de Pruebas de web.html y version 2.html unificado */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#1a1209;--bg2:#231a0f;--card:#2a1f14;--border:#3d2e1f;
+--fg:#f5e6d3;--fg-muted:#b8a08a;
+--primary:#c45a3c;--primary-fg:#fff;
+--gold:#d4a44a;--success:#2ecc71;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6; padding-top: 4rem; scroll-behavior: smooth;}
+h1,h2,h3{font-family:'Playfair Display',serif}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,18,9,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:72rem;margin:0 auto;padding:0 1.5rem;height:4rem;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:1.25rem;color:var(--gold); display:flex; align-items:center; gap: 10px;}
+.nav-brand img {height: 30px; width: auto; display: inline-block;} /* Estilo para el logo */
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-links a{color:var(--fg-muted);font-size:.85rem;font-weight:500;transition:color.2s}
+.nav-links a:hover{color:var(--primary)}
+
+/* BOTONES */
+.btn-primary{background:var(--primary);color:var(--primary-fg);font-weight:600;padding:.6rem 1.2rem;border-radius:.5rem;border:none;cursor:pointer;transition:all.2s;display:inline-flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-primary:hover{opacity:.9; transform: scale(1.02)}
+.btn-primary:disabled{background:#555; cursor:not-allowed}
+.btn-outline{border:1px solid rgba(196,90,60,.3);color:var(--primary);font-weight:500;padding:.5rem 1.25rem;border-radius:.5rem;font-size:.875rem;transition:background.2s;display:inline-flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-outline:hover{background:rgba(196,90,60,.1)}
+
+/* STATUS BAR (HORARIO) */
+.status-bar{padding:.75rem 1.5rem; font-size:.8rem; text-align: center; color: var(--fg-muted); background:var(--bg2);}
+.status-bar.open{background:var(--success); color:#fff;}
+.status-bar.closed{background:var(--bg2); color:var(--fg-muted);}
+
+/* HERO */
+.hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;background:linear-gradient(to bottom,rgba(26,18,9,.8),rgba(26,18,9,.6),var(--bg)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80') center/cover;position:relative}
+.hero h1{font-size:clamp(3rem,8vw,6rem);font-weight:700;background:linear-gradient(135deg,var(--gold),#e8c46a,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero.subtitle{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--primary);font-style:italic;margin:.5rem 0 1.5rem}
+.hero p{color:var(--fg-muted);font-size:1.125rem;max-width:36rem;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* SECTIONS GENERAL */
+section{padding:5rem 1.5rem}
+.container{max-width:72rem;margin:0 auto}
+.section-label{color:var(--primary);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem}
+.section-title{font-size:clamp(1.75rem,4vw,3rem);font-weight:700;margin-bottom:2rem}
+
+/* MENU & FILTERS */
+.filters{display:flex;gap:10px;margin:20px 0;justify-content:center;flex-wrap:wrap}
+.filter{padding:8px 20px;border:1px solid var(--border);border-radius:20px;cursor:pointer; font-size: 0.9rem; transition: 0.3s}
+.filter.active{background:var(--primary); color: white; border-color: var(--primary)}
+
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-top:2rem}
+.item{background:var(--card);padding:1.5rem;border-radius:1rem;border:1px solid var(--border);transition:.3s}
+.item:hover{transform:translateY(-5px); border-color: var(--primary)}
+.item img{width:100%;height:180px;object-fit:cover;border-radius:.75rem;margin-bottom:1rem}
+.item h4{font-size:1.2rem; margin-bottom: 0.5rem}
+.item p{color:var(--gold); font-weight: bold; margin-bottom: 1rem}
+
+select, input{width:100%; margin-bottom: 10px; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--fg)}
+
+/* CART BUTTON */
+.cart-btn{position:fixed;bottom:25px;right:25px;background:var(--primary);padding:15px 20px;border-radius:50px; z-index: 90; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-weight: bold}
+
+/* MODAL */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:200; padding: 20px}
+.modal-content{background:var(--card);padding:2rem;border-radius:1rem;width:100%;max-width:450px;max-height:85vh;overflow-y:auto; border: 1px solid var(--border)}
+.cart-item{display:flex;justify-content:space-between;align-items:center;margin:15px 0; padding-bottom: 10px; border-bottom: 1px solid var(--border)}
+.cart-controls button{width: auto; padding: 5px 10px; margin: 0 2px}
+
+/* SERVICES & OTHERS */
+.services{background:rgba(42,31,20,.3)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:2rem}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:2rem;text-align:center}
+.service-icon{font-size:2rem; margin-bottom: 1rem}
+
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:2rem;margin-top:2rem}
+.contact-info p{margin-bottom:.5rem}
+.social-links a{display:inline-block;margin-right:1rem;font-size:1.5rem;color:var(--fg-muted)}\r
+.social-links a:hover{color:var(--primary)}\r
+.contact-form input,.contact-form textarea{width:100%;padding:10px;margin-bottom:15px;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--fg)}\r
+.contact-form textarea{resize:vertical}\r
+.contact-form button{width:100%}\r
+
+footer{padding:2rem;text-align:center;font-size:.8rem;color:var(--fg-muted);border-top:1px solid var(--border)}
+
+/* TOAST */
+#toast{display:none;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:10px 20px;border-radius:5px;z-index:1000}
+
+/* Responsive */
+@media(max-width:768px){
+.nav-links{display:none}
+.services-grid,.contact-grid{grid-template-columns:1fr}
+.mobile-stack{grid-template-columns:1fr!important;} /* Para la sección de nosotros */
+}
+</style>
+</head>
+<body>
+
+<!-- Status Bar -->
+<div class="status-bar" id="status-bar"></div>
+
+<!-- Navbar -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <img src="URL_DE_CHOLO3.JFIF_AQUI" alt="Zinquetz Logo"> <!-- ¡Reemplazar con la URL real de cholo3.jfif! -->
+            Zinquetz
+        </a>
+        <div class="nav-links">
+            <a href="#sobre-nosotros">Nosotros</a>
+            <a href="#menu">Menú</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+        <button class="btn-primary" id="nav-order-btn" onclick="toggleCart()">Pedido (<span id="nav-total">$0</span>)</button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div>
+        <h1>Zinquetz</h1>
+        <p class="subtitle" style="font-family:'Playfair Display'; font-style:italic; color:var(--primary); font-size:1.5rem">café de raíz</p>
+        <p style="max-width:500px; margin: 1.5rem auto; color:var(--fg-muted)">Bebidas con identidad y antojos inspirados en nuestra cultura mexicana.</p>
+        <a href="#menu" class="btn-primary">Ver Menú Hoy</a>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="sobre-nosotros">
+<div class="container">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items:center" class="mobile-stack">
+        <img src="URL_DE_CHOLO1.JFIF_AQUI" alt="Cafetería Zinquetz" style="width:100%; max-width:400px; border-radius:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.3)"> <!-- ¡Reemplazar con la URL real de cholo1.jfif! -->
+        <div>
+            <p class="section-label">Sobre nosotros</p>
+            <h2 class="section-title">Tradición y creatividad</h2>
+            <p>En Zinquetz, celebramos la riqueza de la cultura mexicana a través de cada taza de café y cada platillo. Nuestro compromiso es ofrecerte una experiencia única, combinando sabores tradicionales con un toque contemporáneo.</p>
+            <p style="margin-top:1rem">Cada grano de café, cada ingrediente fresco, es seleccionado con amor y dedicación para garantizar la más alta calidad. Ven y descubre un espacio donde la pasión por el café y la tradición se encuentran.</p>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Menu Section -->
+<section id="menu">
+    <div class="container">
+        <p class="section-label" style="text-align:center">Nuestras especialidades</p>
+        <h2 style="text-align:center; font-size:2.5rem; margin-bottom:1rem">Menú Digital</h2>
+        <div class="filters">
+            <div class="filter active" onclick="filter('all',this)">Todo</div>
+            <div class="filter" onclick="filter('caliente',this)">Caliente</div>
+            <div class="filter" onclick="filter('frio',this)">Frío</div>
+            <div class="filter" onclick="filter('antojo',this)">Antojos</div>
+        </div>
+        <div class="menu-grid" id="menu-container"></div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="servicios" class="services">
+    <div class="container">
+        <h2 class="section-title" style="text-align:center">Nuestros Servicios</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">☕</div>
+                <h3>Café para Llevar</h3>
+                <p>Disfruta de nuestras bebidas especiales en cualquier lugar.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛵</div>
+                <h3>Servicio a Domicilio</h3>
+                <p>Llevamos tu pedido hasta la puerta de tu hogar o oficina.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎉</div>
+                <h3>Eventos Privados</h3>
+                <p>Contamos con espacio y servicio para tus celebraciones.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contacto" class="container">
+    <h2 class="section-title" style="text-align:center">Contáctanos</h2>
+    <div class="contact-grid">
+        <div class="contact-info">
+            <h3>Visítanos</h3>
+            <p>📍 C. 1º de Mayo 114, Coyuya, CDMX</p>
+            <p>🕐 Abierto de Lunes a Sábado, de 8:00 AM a 8:00 PM</p>
+            <h3 style="margin-top:1.5rem">Llámanos</h3>
+            <p>📞 +52 56 1165 8479</p>
+            <div style="margin-top:2rem">
+                <a href="https://wa.me/5215611658479" class="btn-primary">WhatsApp</a>
+            </div>
+        </div>
+        <div class="map-frame">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.0!2d-99.12!3d19.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDIyJzQ4LjAiTiA5OcKwMDcnMTIuMCJX!5e0!3m2!1ses!2smx!4v1" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+
+<!-- Cart Button -->
+<div class="cart-btn" onclick="toggleCart()">
+    🛒 Carrito <span id="count">0</span>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cart-modal">
+    <div class="modal-content">
+        <h3 style="font-size:1.8rem; margin-bottom:1.5rem">Tu Pedido</h3>
+        <div id="cart-items"></div>
+        <div id="cart-total" style="margin:20px 0; font-size:1.4rem; font-weight:bold; text-align:right">Total: $0.00</div>
+        <button class="btn-primary" id="btn-order-whatsapp" style="width:100%; margin-bottom:10px" onclick="order()">Hacer Pedido por WhatsApp</button>
+        <button class="btn-outline" style="width:100%; margin-bottom: 10px" onclick="clearCart()">Vaciar Carrito</button>
+        <button class="btn-outline" style="width:100%; border:none" onclick="toggleCart()">Cerrar</button>
+    </div>
+</div>
+
+<!-- Toast for Add to Cart -->
+<div id="toast">Producto añadido al carrito</div>
+
+<footer>
+    <p>&copy; 2026 Zinquetz Café de Raíz. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+// JavaScript unificado
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || {};
+let isOpen = false; // Variable para controlar el estado del negocio
+
+function checkStatus() {
+    const now = new Date();
+    const day = now.getDay(); // 0 = Domingo, 1 = Lunes...
+    const hour = now.getHours();
+
+    const statusBar = document.getElementById('status-bar');
+    const navOrderBtn = document.getElementById('nav-order-btn');
+    const whatsappOrderBtn = document.getElementById('btn-order-whatsapp');
+    const addToCartButtons = document.querySelectorAll('.item.btn-primary'); // Seleccionar todos los botones de añadir al carrito
+
+    statusBar.innerText = 'Abierto de Lunes a Sábado, de 8:00 AM a 8:00 PM';
+
+    // Abierto de Lunes a Sábado, 8 AM - 8 PM
+    if (day >= 1 && day <= 6 && hour >= 8 && hour < 20) {
+        isOpen = true;
+        statusBar.classList.remove('closed');
+        statusBar.classList.add('open');
+        statusBar.innerText = '¡Estamos abiertos! Haz tu pedido. ' + statusBar.innerText;
+    } else {
+        isOpen = false;
+        statusBar.classList.remove('open');
+        statusBar.classList.add('closed');
+        statusBar.innerText = 'Estamos cerrados. ¡Vuelve mañana! ' + statusBar.innerText;
+    }
+
+    // Habilitar/deshabilitar botones de pedido
+    if (isOpen) {
+        navOrderBtn.removeAttribute('disabled');
+        whatsappOrderBtn.removeAttribute('disabled');
+        addToCartButtons.forEach(btn => btn.removeAttribute('disabled'));
+    } else {
+        navOrderBtn.setAttribute('disabled', 'true');
+        whatsappOrderBtn.setAttribute('disabled', 'true');
+        addToCartButtons.forEach(btn => btn.setAttribute('disabled', 'true'));
+    }
+}
+
+async function renderMenu() {
+    // Productos con las URLs de imágenes proporcionadas
+    products = [
+        { id: '1', name: 'Latte', price: 40, category: 'caliente', img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348', sizes: [{name: 'Chico', mult: 1}, {name: 'Mediano', mult: 1.2}, {name: 'Grande', mult: 1.5}]},
+        { id: '2', name: 'Moka', price: 50, category: 'caliente', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93', sizes: [{name: 'Chico', mult: 1}, {name: 'Mediano', mult: 1.2}, {name: 'Grande', mult: 1.5}]},
+        { id: '3', name: 'Cold Brew', price: 45, category: 'frio', img: 'https://images.unsplash.com/photo-1498804103079-a6351b050096', sizes: [{name: 'Chico', mult: 1}, {name: 'Mediano', mult: 1.2}, {name: 'Grande', mult: 1.5}]},
+        { id: '4', name: 'Frappuccino', price: 60.00, category: 'frio', img: 'https://images.unsplash.com/photo-1546736203-d6d7e2f5b8c3?auto=format&fit=crop&q=80&w=200', sizes: [{name: 'Regular', mult: 1}, {name: 'Grande', mult: 1.2}]},
+        { id: '5', name: 'Concha', price: 20.00, category: 'antojo', img: 'https://images.unsplash.com/photo-1563604044-3c6c0b3c6c0b?auto=format&fit=crop&q=80&w=200'},
+        { id: '6', name: 'Brownie', price: 35.00, category: 'antojo', img: 'https://images.unsplash.com/photo-1596700683015-d4a8d0b2f9c4?auto=format&fit=crop&q=80&w=200'},
+    ];
+    filter('all', document.querySelector('.filters.filter.active'));
+    // Volver a revisar el estado después de renderizar el menú para asegurar que los botones "Agregar al Pedido" se desactiven.
+    checkStatus();
+}
+
+function filter(category, element) {
+    document.querySelectorAll('.filter').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    let html = '';
+    const filteredProducts = category === 'all'? products : products.filter(p => p.category === category);
+
+    filteredProducts.forEach(p => {
+        html += `
+            <div class="item">
+                <img src="${p.img}" alt="${p.name}">
+                <h4>${p.name}</h4>
+                <p>$${p.price.toFixed(2)}</p>
+                ${p.sizes? `
+                    <select id="size-${p.id}">
+                        ${p.sizes.map(s => `<option value="${s.name}" data-mult="${s.mult}">${s.name}</option>`).join('')}
+                    </select>
+                ` : ''}
+                ${(p.category === 'caliente' || p.category === 'frio') && p.id!== '1'? `
+                    <select id="milk-${p.id}">
+                        <option value="entera" data-add="0">Leche Entera</option>
+                        <option value="almendra" data-add="10">Leche de Almendra (+$10)</option>
+                        <option value="coco" data-add="10">Leche de Coco (+$10)</option>
+                    </select>
+                    <select id="syrup-${p.id}">
+                        <option value="nada" data-add="0">Sin Sabor Extra</option>
+                        <option value="vainilla" data-add="5">Vainilla (+$5)</option>
+                        <option value="caramelo" data-add="5">Caramelo (+$5)</option>
+                    </select>
+                ` : ''}
+                <input type="text" id="note-${p.id}" placeholder="Notas especiales (ej. sin azúcar)">
+                <button class="btn-primary" style="width:100%" onclick="addToCart('${p.id}')">Agregar al Pedido</button>
+            </div>
+        `;
+    });
+    document.getElementById('menu-container').innerHTML = html;
+    // Después de renderizar los elementos, verificar el estado del negocio para habilitar/deshabilitar los botones de añadir al carrito
+    checkStatus();
+}
+
+function addToCart(pid) {
+    if (!isOpen) { // Prevenir añadir al carrito si está cerrado
+        alert('Lo sentimos, estamos cerrados. No podemos tomar pedidos en este momento.');
+        return;
+    }
+
+    const p = products.find(prod => prod.id === pid);
+    const sizeEl = document.getElementById(`size-${pid}`);
+    const sizeName = sizeEl? sizeEl.value : 'Único';
+    const sizeMult = sizeEl? parseFloat(sizeEl.options[sizeEl.selectedIndex].dataset.mult) : 1;
+
+    let extraPrice = 0;
+    let details = `Tam: ${sizeName}`;
+
+    const milkEl = document.getElementById(`milk-${pid}`);
+    if(milkEl) {
+        extraPrice += parseFloat(milkEl.options[milkEl.selectedIndex].dataset.add);
+        details += `, Leche: ${milkEl.value}`;
+    }
+
+    const syrupEl = document.getElementById(`syrup-${pid}`);
+    if(syrupEl) {
+        extraPrice += parseFloat(syrupEl.options[syrupEl.selectedIndex].dataset.add);
+        details += `, Sabor: ${syrupEl.value}`;
+    }
+
+    const note = document.getElementById(`note-${p.id}`).value; // Asegurarse de usar p.id
+    const finalPrice = (p.price * sizeMult) + extraPrice;
+
+    const cartKey = `${p.name}-${details}-${note}`;
+
+    if(!cart[cartKey]) {
+        cart[cartKey] = { name: p.name, price: finalPrice, details: details, note: note, qty: 0 };
+    }
+    cart[cartKey].qty++;
+
+    showToast();
+    save();
+    updateUI();
+}
+
+function showToast() {
+    const t = document.getElementById('toast');
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2000);
+}
+
+function updateUI() {
+    let html = '';
+    let total = 0;
+    let count = 0;
+
+    for(let k in cart) {
+        let item = cart[k];
+        let subtotal = item.price * item.qty;
+        total += subtotal;
+        count += item.qty;
+        html += `
+            <div class="cart-item">
+                <div style="display:flex; justify-content:space-between">
+                    <strong>${item.name} (x${item.qty})</strong>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <small>${item.details}</small>
+                ${item.note? `<small style="display:block; margin-top:5px">Nota: ${item.note}</small>` : ''}
+                <div class="cart-controls">
+                    <button class="btn-outline" onclick="remove('${k}')">-</button>
+                    <span>${item.qty}</span>
+                    <button class="btn-outline" onclick="addByKey('${k}')">+</button>
+                </div>
+            </div>`;
+    }
+    document.getElementById('cart-items').innerHTML = html || 'Tu carrito está vacío';
+    document.getElementById('cart-total').innerText = 'Total: $' + total.toFixed(2);
+    document.getElementById('count').innerText = count;
+    document.getElementById('nav-total').innerText = '$' + total.toFixed(2);
+}
+
+function addByKey(k){cart[k].qty++;save();updateUI();}
+function remove(k){cart[k].qty--;if(cart[k].qty<=0)delete cart[k];save();updateUI();}
+function clearCart(){cart={};save();updateUI();}
+function save(){localStorage.setItem('cart',JSON.stringify(cart));}
+
+function toggleCart(){
+    let c = document.getElementById('cart-modal');
+    c.style.display = c.style.display == 'flex'? 'none' : 'flex';
+}
+
+function order(){
+    if (!isOpen) { // Prevenir pedido por WhatsApp si está cerrado
+        alert('Lo sentimos, estamos cerrados. No podemos procesar tu pedido en este momento.');
+        return;
+    }
+
+    let msg = '*Nuevo Pedido Zinquetz*%0A--------------------------%0A';
+    let total = 0;
+    for(let k in cart){
+        let item = cart[k];
+        let price = item.price * item.qty;
+        msg += `• ${item.name} (x${item.qty}) - $${price.toFixed(2)}%0A`;
+        if (item.details) msg += ` _${item.details}_%0A`;
+        if (item.note) msg += ` Nota: ${item.note}%0A`;
+    }
+    if(total === 0) {
+        alert("El carrito está vacío. Agrega algunos productos antes de hacer tu pedido.");
+        return;
+    }
+    msg += `--------------------------%0A*Total:$${total.toFixed(2)}*%0A%0A_Pedido realizado desde Menú Digital_`;
+    window.open(`https://wa.me/5215611658479?text=${msg}`);
+}
+
+// INICIO
+checkStatus();
+renderMenu();
+updateUI();
+setInterval(checkStatus, 60000); // Revisa horario cada minuto
+</script>
+
+</body>
+</html>
